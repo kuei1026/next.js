@@ -1,6 +1,7 @@
 import Form from '@/app/ui/invoices/edit-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { fetchCustomers, fetchInvoiceById } from '@/app/lib/data';
+import { notFound } from 'next/navigation';
  
 export default async function Page(props: {params: Promise<{ id: string }> }) {
     const params = await props.params;
@@ -9,6 +10,10 @@ export default async function Page(props: {params: Promise<{ id: string }> }) {
         fetchInvoiceById(id),
         fetchCustomers(),
     ]);
+    // 如果找不到這個Id的發票，則返回404頁面
+    if (!invoice) {
+        return notFound();
+    }
 
     return (
         <main>
